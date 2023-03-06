@@ -14,6 +14,7 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer) {
                 base_altitude: setAltitude,
                 extrusion_height: setExtrusion,
             },
+
         }),
     });
 
