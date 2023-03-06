@@ -18,6 +18,7 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer) {
                 base_altitude: setAltitude,
                 extrusion_height: setExtrusion,
             },
+
         }),
         onMeshCreated: (obj, ctx) => listCoords.push({ x: ctx.geometryLayer.builder.tmp.coords[0].x, z: ctx.geometryLayer.builder.tmp.coords[0].z, y: ctx.geometryLayer.builder.tmp.coords[0].y })
     });
