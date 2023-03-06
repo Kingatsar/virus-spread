@@ -2,7 +2,6 @@ import { wmtsLayer } from "./models/wmts";
 import { elevationLayer } from "./models/elevation";
 import { buildingLayer } from "./models/building";
 
-
 // View
 const viewerDiv = document.getElementById('viewerDiv');
 const placement = {
@@ -18,6 +17,7 @@ const wmts_layer = wmtsLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoport
     'ORTHOIMAGERY.ORTHOPHOTOS',
     'PM',
     'image/jpeg');
+
 view.addLayer(wmts_layer);
 
 // Elevation
@@ -26,9 +26,10 @@ const elevation_layer = elevationLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuq
     'ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES',
     'WGS84G',
     'image/x-bil;bits=32');
+
 view.addLayer(elevation_layer);
 
-// Geometry Layer 
+//  GeometryLayer
 const geometry_layer = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
     'BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
     'EPSG:4326',
