@@ -14,7 +14,7 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer) {
         zoom: { min: zoomMinLayer },
         style: new itowns.Style({
             fill: {
-                // color: setColor,
+                color: setColor,
                 base_altitude: setAltitude,
                 extrusion_height: setExtrusion,
             },
