@@ -29,12 +29,15 @@ const elevation_layer = elevationLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuq
 
 view.addLayer(elevation_layer);
 
-//  GeometryLayer
-const geometry_layer = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
+const layerCoord = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
     'BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
     'EPSG:4326',
     14);
+//  GeometryLayer
+const geometry_layer = layerCoord.layer
+const geometry_coord = layerCoord.coords
+console.log(geometry_coord)
+
 view.addLayer(geometry_layer);
 
-
-
+console.log("listCoords")
