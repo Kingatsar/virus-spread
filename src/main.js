@@ -1,6 +1,6 @@
 import { wmtsLayer } from "./models/wmts";
 import { elevationLayer } from "./models/elevation";
-import { buildingLayer } from "./models/building";
+import { buildingLayer, addMeshToScene } from "./models/building";
 
 // View
 const viewerDiv = document.getElementById('viewerDiv');
@@ -48,10 +48,17 @@ const layerCoord = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geo
 //  GeometryLayer
 const geometry_layer = layerCoord.layer
 const ListMesh = layerCoord.coords // List Mesh
+
+
+console.log("test");
 console.log(ListMesh);
-
-
 view.addLayer(geometry_layer);
+
+
+
+
+
+
 
 
 function updateAgent(ListMesh) {
@@ -86,13 +93,21 @@ function animate() {
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
-animate();
+// animate();
 
 
 // Listen for globe full initialisation event
 view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globeInitialized() {
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
+
+    let mesh;
+
+    Object.entries(ListMesh).forEach(function ([key, val]) {
+        mesh = addMeshToScene(val.position.x, val.position.y, val.position.z, view);
+        ListMesh[key].mesh = mesh;
+        console.log("test2")
+    })
 
 
 });
