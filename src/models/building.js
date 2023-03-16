@@ -1,9 +1,10 @@
 
-export function buildingLayer(serverURL, nameType, crs, zoomMinLayer) {
+export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent) {
     const geometrySource = new itowns.WFSSource({
         url: serverURL,
         typeName: nameType,
         crs: crs,
+        extent: extent
     });
 
     var listCoords = [];
@@ -20,7 +21,8 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer) {
             },
 
         }),
-        onMeshCreated: (obj, ctx) => listCoords.push({ x: ctx.geometryLayer.builder.tmp.coords[0].x, z: ctx.geometryLayer.builder.tmp.coords[0].z, y: ctx.geometryLayer.builder.tmp.coords[0].y })
+        onMeshCreated: (obj, ctx) => listCoords.push({ x: ctx.geometryLayer.builder.tmp.coords[0].x, z: ctx.geometryLayer.builder.tmp.coords[0].z, y: ctx.geometryLayer.builder.tmp.coords[0].y }),
+
     });
 
     // console.log(listCoords)

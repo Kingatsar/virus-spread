@@ -30,7 +30,7 @@ export function elevationLayer(serverURL, crs, name, tileMatrixSet, format) {
                 minTileCol: 15914,
                 maxTileCol: 20507
             }
-        }
+        },
     });
 
     const eleLayer = new itowns.ElevationLayer('MNT_WORLD', {

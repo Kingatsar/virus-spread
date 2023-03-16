@@ -4,11 +4,21 @@ import { buildingLayer } from "./models/building";
 
 // View
 const viewerDiv = document.getElementById('viewerDiv');
+
+const extent = {
+    west: 4.77244,
+    east: 4.87408,
+    south: 45.71694,
+    north: 45.80481,
+}
+
 const placement = {
     coord: new itowns.Coordinates('EPSG:4326', 4.818, 45.7354),
     range: 1000,
     tilt: 20,
 };
+
+
 let view = new itowns.GlobeView(viewerDiv, placement);
 
 // WMTS Layer
@@ -32,7 +42,8 @@ view.addLayer(elevation_layer);
 const layerCoord = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
     'BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
     'EPSG:4326',
-    14);
+    14,
+    extent);
 //  GeometryLayer
 const geometry_layer = layerCoord.layer
 const geometry_coord = layerCoord.coords
