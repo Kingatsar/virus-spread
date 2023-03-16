@@ -1,6 +1,6 @@
 import { wmtsLayer } from "./models/wmts";
 import { elevationLayer } from "./models/elevation";
-import { buildingLayer } from "./models/building";
+import { buildingLayer, addMeshToScene } from "./models/building";
 
 // View
 const viewerDiv = document.getElementById('viewerDiv');
@@ -13,9 +13,9 @@ const extent = {
 }
 
 const placement = {
-    coord: new itowns.Coordinates('EPSG:4326', 4.818, 45.7354),
-    range: 1000,
-    tilt: 20,
+    coord: new itowns.Coordinates('EPSG:4326', 4.83518, 45.76130),
+    range: 3000,
+    tilt: 60,
 };
 
 
@@ -48,30 +48,41 @@ const layerCoord = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geo
 //  GeometryLayer
 const geometry_layer = layerCoord.layer
 const ListMesh = layerCoord.coords // List Mesh
+
+
+console.log("test");
 console.log(ListMesh);
-
-
 view.addLayer(geometry_layer);
+
+
+
+
+
+
 
 
 function updateAgent(ListMesh) {
     Object.entries(ListMesh).forEach(function ([key, val]) {
 
+        if (val.mesh) {
+            const cameraTargetPosition = view.controls.getLookAtCoordinate();
 
-        const cameraTargetPosition = view.controls.getLookAtCoordinate();
+            // position of the mesh
+            const meshCoord = cameraTargetPosition;
 
-        // position of the mesh
-        const meshCoord = cameraTargetPosition;
+            val.mesh.position.x += 0.1;
+            val.mesh.position.y += 0.1;
+
+            val.position.x += 0.1;
+            val.position.y += 0.1;
+
+            // update coordinate of the mesh
+            val.mesh.updateMatrixWorld();
 
 
-        val.position.x += 0.1;
-        val.position.y += 0.1;
+            { {/*  view.camera.camera3D.position.x += 0.01;  */ } }
+        }
 
-        // update coordinate of the mesh
-        val.updateMatrixWorld();
-
-
-        { {/*  view.camera.camera3D.position.x += 0.01;  */ } }
 
 
     }
@@ -82,11 +93,15 @@ function updateAgent(ListMesh) {
 
 function animate() {
     requestAnimationFrame(animate);
+
+    console.log(Object.entries(ListMesh).length
+    )
+
     updateAgent(ListMesh)
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
-animate();
+// animate();
 
 
 // Listen for globe full initialisation event
@@ -94,6 +109,16 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     // eslint-disable-next-line no-console
     console.info('Globe initialized');
 
+    let mesh;
+
+    // add mesh
+    Object.entries(ListMesh).forEach(function ([key, val]) {
+        mesh = addMeshToScene(val.position.x, val.position.y, val.position.z, view);
+        ListMesh[key].mesh = mesh;
+        console.log("test2")
+    })
+
+    animate()
 
 });
 

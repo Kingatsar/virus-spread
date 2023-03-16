@@ -33,11 +33,20 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
                     count++;
 
                     if ((count % 70) == 0) {
+                        // console.log(goem.properties);
 
-                        mesh = addMeshToScene((goem.properties.bbox[0] + goem.properties.bbox[2]) / 2, (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2, view);
+                        // mesh = addMeshToScene((goem.properties.bbox[0] + goem.properties.bbox[2]) / 2, (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2, view);
+
+
                         let id = goem.properties.id;
-                        console.log(mesh);
-                        ListMesh[id] = mesh;
+                        ListMesh[id] = {
+                            id: id,
+                            position: {
+                                x: (goem.properties.bbox[0] + goem.properties.bbox[2]) / 2,
+                                y: (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2,
+                                z: goem.properties.z_min
+                            }
+                        };
                         { {/*  console.log(mesh)  */ } }
 
                     }
@@ -86,7 +95,7 @@ function setAltitude(properties) {
 */
 
 
-function addMeshToScene(x, y, view) {
+export function addMeshToScene(x, y, z, view) {
     // creation of the new mesh (a cylinder)
     const THREE = itowns.THREE;
     const geometry = new THREE.CylinderGeometry(0, 10, 60, 8);
