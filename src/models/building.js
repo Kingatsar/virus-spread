@@ -32,7 +32,7 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
                 geoms.map(goem => {
                     count++;
 
-                    if ((count % 70) == 0) {
+                    if ((count % 20) == 0) {
                         // console.log(goem.properties);
 
                         // mesh = addMeshToScene((goem.properties.bbox[0] + goem.properties.bbox[2]) / 2, (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2, view);

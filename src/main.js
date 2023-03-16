@@ -51,30 +51,33 @@ const ListMesh = layerCoord.coords // List Mesh
 
 
 console.log("test");
-console.log(ListMesh);
+// console.log(ListMesh);
 view.addLayer(geometry_layer);
 
 
-
-
-
-
-
-
 function updateAgent(ListMesh) {
+    // meshNewPos(meshPosition, destinationPosition)
+
+    let newMeshPos;
+
+    console.log("dfsqfsqdfsqfsdqfd");
+
     Object.entries(ListMesh).forEach(function ([key, val]) {
 
         if (val.mesh) {
-            const cameraTargetPosition = view.controls.getLookAtCoordinate();
 
-            // position of the mesh
-            const meshCoord = cameraTargetPosition;
+            console.log("dfsqfsqdfsqfsdqfd");
 
-            val.mesh.position.x += 0.1;
-            val.mesh.position.y += 0.1;
+            console.log(val.mesh.position)
 
-            val.position.x += 0.1;
-            val.position.y += 0.1;
+            newMeshPos = meshNewPos(val.mesh.position, val.destination);
+
+            // // console.log(newMeshPos)
+            val.mesh.position.x = newMeshPos.x;
+            val.mesh.position.y = newMeshPos.y;
+
+            // val.mesh.position.x += 0.1;
+            // val.mesh.position.y += 0.1;
 
             // update coordinate of the mesh
             val.mesh.updateMatrixWorld();
@@ -100,7 +103,7 @@ function animate() {
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
-// animate();
+
 
 
 // Listen for globe full initialisation event
@@ -115,17 +118,60 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     let keysLength = keys.length;
 
 
-    // add mesh
+    // add mesh + pos batiment fix
     Object.entries(ListMesh).forEach(function ([key, val]) {
         randomKey = keys[Math.floor(Math.random() * keysLength)];
         mesh = addMeshToScene(val.position.x, val.position.y, val.position.z, view);
         ListMesh[key].mesh = mesh;
-        ListMesh[key].destination = ListMesh[randomKey].position;
 
-        console.log("test2")
+        ListMesh[key].posBuilding = mesh.position;
+
+        // console.log(mesh)
     })
 
+    // add destination
+    Object.entries(ListMesh).forEach(function ([key, val]) {
+        randomKey = keys[Math.floor(Math.random() * keysLength)];
+        let mesh = ListMesh[key].mesh;
+
+        ListMesh[key].destination = ListMesh[randomKey].mesh.position;
+
+    })
+    console.log('"""""""""""""""""""""""""""""')
     console.log(ListMesh);
+    // updateAgent(ListMesh)
     animate()
 
 });
+
+function meshNewPos(meshPosition, destinationPosition) {
+
+    // console.log(meshPosition)
+
+    let mx = meshPosition.x;
+    let my = meshPosition.y;
+
+    let dx = destinationPosition.x;
+    let dy = destinationPosition.y;
+
+    let diff_x = Math.abs(mx - dx);
+    let diff_y = Math.abs(my - dy);
+
+    if ((mx < dx) && (diff_x > 1)) {
+        mx += 0.5;
+    } else if ((my < dy) && (diff_y > 1)) {
+        my += 0.5;
+    } else if ((mx > dx) && (diff_x > 1)) {
+        mx -= 0.5;
+    } else if ((my > dy) && (diff_y > 1)) {
+        my -= 0.5;
+    } else if ((diff_x < 1)) {
+        mx = dx;
+    } else if ((diff_y < 1)) {
+        my = dy;
+    }
+
+    console.log(mx)
+    console.log(my)
+    return { x: mx, y: my };
+}
