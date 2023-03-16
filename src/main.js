@@ -94,8 +94,7 @@ function updateAgent(ListMesh) {
 function animate() {
     requestAnimationFrame(animate);
 
-    console.log(Object.entries(ListMesh).length
-    )
+
 
     updateAgent(ListMesh)
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
@@ -110,17 +109,23 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     console.info('Globe initialized');
 
     let mesh;
+    let randomKey;
+
+    let keys = Object.keys(ListMesh);
+    let keysLength = keys.length;
+
 
     // add mesh
     Object.entries(ListMesh).forEach(function ([key, val]) {
+        randomKey = keys[Math.floor(Math.random() * keysLength)];
         mesh = addMeshToScene(val.position.x, val.position.y, val.position.z, view);
         ListMesh[key].mesh = mesh;
+        ListMesh[key].destination = ListMesh[randomKey].position;
+
         console.log("test2")
     })
 
+    console.log(ListMesh);
     animate()
 
 });
-
-
-
