@@ -5,7 +5,7 @@ export function wmtsLayer(serverURL, crs, name, tileMatrixSet, format) {
         crs: crs,
         name: name,
         tileMatrixSet: tileMatrixSet,
-        format: format
+        format: format,
     });
 
     const colorLayer = new itowns.ColorLayer('Ortho', {
