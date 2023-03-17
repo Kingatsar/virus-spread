@@ -25,9 +25,9 @@ let view = new itowns.GlobeView(viewerDiv, placement, {
         Km: 0.15,
         ESun: 100.0,
         g: 100,
-        innerRadius: 6371000,
-        outerRadius: 6400000,
-        wavelength: [0.575],
+        innerRadius: 6370000,
+        outerRadius: 6370001,
+        wavelength: [0.7],
         scaleDepth: 0.38,
     }
 });
