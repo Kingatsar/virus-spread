@@ -74,37 +74,33 @@ function updateAgent(ListMesh) {
 
             newMeshPos = meshNewPos(val.mesh.position, val.destination);
             if (newMeshPos) {
-                console.log('ierughieur')
-                console.log(Math.abs(newMeshPos.x - val.destination.x))
-                console.log(Math.abs(newMeshPos.y - val.destination.y))
                 // console.log("dfsqfsqdfsqfsdqfd");
                 if (((Math.abs(newMeshPos.x - val.destination.x)) < 1) && ((Math.abs(newMeshPos.y - val.destination.y)) < 1)) {
                     // reached destination
-                    console.log('CHANGE COLOR')
-
-                    randomKey = keys[Math.floor(Math.random() * keysLength)];
-                    ListMesh[key].destination = ListMesh[randomKey].posBuilding;
-                    ListMesh[key].mesh.material.color.setHex(0x00ff00);
+                    if (val.virusPropabillity > 0.7) {
+                        // Contaminated
+                        console.log('CHANGE COLOR')
+                        randomKey = keys[Math.floor(Math.random() * keysLength)];
+                        ListMesh[key].destination = ListMesh[randomKey].posBuilding;
+                        ListMesh[key].mesh.material.color.setHex(0x00ff00);
+                    } else {
+                        // change probability
+                        ListMesh[key].virusPropabillity = Math.random();
+                    }
 
                 } else {
                     // console.log(val.mesh.position)
                     val.mesh.position.x = newMeshPos.x;
                     val.mesh.position.y = newMeshPos.y;
 
-                    // console.log(val.mesh.position)
                 }
             }
 
-            // // console.log(newMeshPos)
-
-            // val.mesh.position.x += 0.1;
-            // val.mesh.position.y += 0.1;
 
             // update coordinate of the mesh
             val.mesh.updateMatrixWorld();
 
 
-            { {/*  view.camera.camera3D.position.x += 0.01;  */ } }
         }
 
 
@@ -175,12 +171,7 @@ function meshNewPos(meshPosition, destinationPosition) {
 
     let diff_x = Math.abs(mx - dx);
     let diff_y = Math.abs(my - dy);
-    if (diff_x < 1) {
-        console.log(true);
-    }
-    if (diff_y < 1) {
-        console.log(true);
-    }
+
     if ((mx < dx) && (diff_x > 1)) {
         mx += 1;
     } else if ((my < dy) && (diff_y > 1)) {
@@ -195,7 +186,5 @@ function meshNewPos(meshPosition, destinationPosition) {
         my = dy;
     }
 
-    // console.log(mx)
-    // console.log(my)
     return { x: mx, y: my };
 }

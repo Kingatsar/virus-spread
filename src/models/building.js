@@ -33,10 +33,6 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
                     count++;
 
                     if ((count % 20) == 0) {
-                        // console.log(goem.properties);
-
-                        // mesh = addMeshToScene((goem.properties.bbox[0] + goem.properties.bbox[2]) / 2, (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2, view);
-
 
                         let id = goem.properties.id;
                         ListMesh[id] = {
@@ -45,7 +41,8 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
                                 x: (goem.properties.bbox[0] + goem.properties.bbox[2]) / 2,
                                 y: (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2,
                                 z: goem.properties.z_min
-                            }
+                            },
+                            virusPropability: Math.random()
                         };
                         { {/*  console.log(mesh)  */ } }
 
