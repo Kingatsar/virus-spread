@@ -99,7 +99,7 @@ export function addMeshToScene(x, y, z, view) {
     // creation of the new mesh (a cylinder)
     const THREE = itowns.THREE;
     const geometry = new THREE.CylinderGeometry(0, 10, 60, 8);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffc0cb });
+    const material = new THREE.MeshBasicMaterial({ color: 0xff69b4 });
     const mesh = new THREE.Mesh(geometry, material);
 
     // get the position on the globe, from the camera

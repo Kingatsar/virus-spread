@@ -59,22 +59,43 @@ function updateAgent(ListMesh) {
     // meshNewPos(meshPosition, destinationPosition)
 
     let newMeshPos;
+    let randomKey;
 
-    console.log("dfsqfsqdfsqfsdqfd");
+    let keys = Object.keys(ListMesh);
+    let keysLength = keys.length;
+    // console.log("dfsqfsqdfsqfsdqfd");
 
     Object.entries(ListMesh).forEach(function ([key, val]) {
 
         if (val.mesh) {
 
-            console.log("dfsqfsqdfsqfsdqfd");
 
-            console.log(val.mesh.position)
+            // console.log(val.mesh)
 
             newMeshPos = meshNewPos(val.mesh.position, val.destination);
+            if (newMeshPos) {
+                console.log('ierughieur')
+                console.log(Math.abs(newMeshPos.x - val.destination.x))
+                console.log(Math.abs(newMeshPos.y - val.destination.y))
+                // console.log("dfsqfsqdfsqfsdqfd");
+                if (((Math.abs(newMeshPos.x - val.destination.x)) < 1) && ((Math.abs(newMeshPos.y - val.destination.y)) < 1)) {
+                    // reached destination
+                    console.log('CHANGE COLOR')
+
+                    randomKey = keys[Math.floor(Math.random() * keysLength)];
+                    ListMesh[key].destination = ListMesh[randomKey].posBuilding;
+                    ListMesh[key].mesh.material.color.setHex(0x00ff00);
+
+                } else {
+                    // console.log(val.mesh.position)
+                    val.mesh.position.x = newMeshPos.x;
+                    val.mesh.position.y = newMeshPos.y;
+
+                    // console.log(val.mesh.position)
+                }
+            }
 
             // // console.log(newMeshPos)
-            val.mesh.position.x = newMeshPos.x;
-            val.mesh.position.y = newMeshPos.y;
 
             // val.mesh.position.x += 0.1;
             // val.mesh.position.y += 0.1;
@@ -91,6 +112,7 @@ function updateAgent(ListMesh) {
     }
 
     )
+    // console.log(ListMesh);
 }
 
 
@@ -117,7 +139,6 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     let keys = Object.keys(ListMesh);
     let keysLength = keys.length;
 
-
     // add mesh + pos batiment fix
     Object.entries(ListMesh).forEach(function ([key, val]) {
         randomKey = keys[Math.floor(Math.random() * keysLength)];
@@ -132,9 +153,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     // add destination
     Object.entries(ListMesh).forEach(function ([key, val]) {
         randomKey = keys[Math.floor(Math.random() * keysLength)];
-        let mesh = ListMesh[key].mesh;
-
-        ListMesh[key].destination = ListMesh[randomKey].mesh.position;
+        ListMesh[key].destination = ListMesh[randomKey].posBuilding;
 
     })
     console.log('"""""""""""""""""""""""""""""')
@@ -156,22 +175,27 @@ function meshNewPos(meshPosition, destinationPosition) {
 
     let diff_x = Math.abs(mx - dx);
     let diff_y = Math.abs(my - dy);
-
+    if (diff_x < 1) {
+        console.log(true);
+    }
+    if (diff_y < 1) {
+        console.log(true);
+    }
     if ((mx < dx) && (diff_x > 1)) {
-        mx += 0.5;
+        mx += 1;
     } else if ((my < dy) && (diff_y > 1)) {
-        my += 0.5;
+        my += 1;
     } else if ((mx > dx) && (diff_x > 1)) {
-        mx -= 0.5;
+        mx -= 1;
     } else if ((my > dy) && (diff_y > 1)) {
-        my -= 0.5;
+        my -= 1;
     } else if ((diff_x < 1)) {
         mx = dx;
     } else if ((diff_y < 1)) {
         my = dy;
     }
 
-    console.log(mx)
-    console.log(my)
+    // console.log(mx)
+    // console.log(my)
     return { x: mx, y: my };
 }
