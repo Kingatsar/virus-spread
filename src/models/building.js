@@ -42,7 +42,7 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
                                 y: (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2,
                                 z: goem.properties.z_min
                             },
-                            virusPropability: Math.random()
+                            virusProbability: Math.random(),
                         };
                         { {/*  console.log(mesh)  */ } }
 

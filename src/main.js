@@ -19,8 +19,21 @@ const placement = {
 };
 
 
-let view = new itowns.GlobeView(viewerDiv, placement);
+let view = new itowns.GlobeView(viewerDiv, placement, {
+    atmosphere: {
+        Kr: 0.05,
+        Km: 0.15,
+        ESun: 100.0,
+        g: 100,
+        innerRadius: 6371000,
+        outerRadius: 6400000,
+        wavelength: [0.575],
+        scaleDepth: 0.38,
+    }
+});
 
+const atmosphere = view.getLayerById('atmosphere');
+atmosphere.setRealisticOn(true);
 // WMTS Layer
 const wmts_layer = wmtsLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts',
     'EPSG:3857',
@@ -67,7 +80,7 @@ function updateAgent(ListMesh) {
 
     Object.entries(ListMesh).forEach(function ([key, val]) {
 
-        if (val.mesh) {
+        if (val.mesh && val.destination && val.mesh.position) {
 
 
             // console.log(val.mesh)
@@ -77,7 +90,7 @@ function updateAgent(ListMesh) {
                 // console.log("dfsqfsqdfsqfsdqfd");
                 if (((Math.abs(newMeshPos.x - val.destination.x)) < 1) && ((Math.abs(newMeshPos.y - val.destination.y)) < 1)) {
                     // reached destination
-                    if (val.virusPropabillity > 0.7) {
+                    if (val.virusProbability > 0.7) {
                         // Contaminated
                         console.log('CHANGE COLOR')
                         randomKey = keys[Math.floor(Math.random() * keysLength)];
@@ -85,7 +98,7 @@ function updateAgent(ListMesh) {
                         ListMesh[key].mesh.material.color.setHex(0x00ff00);
                     } else {
                         // change probability
-                        ListMesh[key].virusPropabillity = Math.random();
+                        ListMesh[key].virusProbability = Math.random();
                     }
 
                 } else {
