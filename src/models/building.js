@@ -32,11 +32,7 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
                 geoms.map(goem => {
                     count++;
 
-                    if ((count % 70) == 0) {
-                        // console.log(goem.properties);
-
-                        // mesh = addMeshToScene((goem.properties.bbox[0] + goem.properties.bbox[2]) / 2, (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2, view);
-
+                    if ((count % 20) == 0) {
 
                         let id = goem.properties.id;
                         ListMesh[id] = {
@@ -45,7 +41,8 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
                                 x: (goem.properties.bbox[0] + goem.properties.bbox[2]) / 2,
                                 y: (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2,
                                 z: goem.properties.z_min
-                            }
+                            },
+                            virusPropability: Math.random()
                         };
                         { {/*  console.log(mesh)  */ } }
 
@@ -99,7 +96,7 @@ export function addMeshToScene(x, y, z, view) {
     // creation of the new mesh (a cylinder)
     const THREE = itowns.THREE;
     const geometry = new THREE.CylinderGeometry(0, 10, 60, 8);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffc0cb });
+    const material = new THREE.MeshBasicMaterial({ color: 0xff69b4 });
     const mesh = new THREE.Mesh(geometry, material);
 
     // get the position on the globe, from the camera

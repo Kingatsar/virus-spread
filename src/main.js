@@ -51,36 +51,56 @@ const ListMesh = layerCoord.coords // List Mesh
 
 
 console.log("test");
-console.log(ListMesh);
+// console.log(ListMesh);
 view.addLayer(geometry_layer);
 
 
-
-
-
-
-
-
 function updateAgent(ListMesh) {
+    // meshNewPos(meshPosition, destinationPosition)
+
+    let newMeshPos;
+    let randomKey;
+
+    let keys = Object.keys(ListMesh);
+    let keysLength = keys.length;
+    // console.log("dfsqfsqdfsqfsdqfd");
+
     Object.entries(ListMesh).forEach(function ([key, val]) {
 
         if (val.mesh) {
-            const cameraTargetPosition = view.controls.getLookAtCoordinate();
 
-            // position of the mesh
-            const meshCoord = cameraTargetPosition;
 
-            val.mesh.position.x += 0.1;
-            val.mesh.position.y += 0.1;
+            // console.log(val.mesh)
 
-            val.position.x += 0.1;
-            val.position.y += 0.1;
+            newMeshPos = meshNewPos(val.mesh.position, val.destination);
+            if (newMeshPos) {
+                // console.log("dfsqfsqdfsqfsdqfd");
+                if (((Math.abs(newMeshPos.x - val.destination.x)) < 1) && ((Math.abs(newMeshPos.y - val.destination.y)) < 1)) {
+                    // reached destination
+                    if (val.virusPropabillity > 0.7) {
+                        // Contaminated
+                        console.log('CHANGE COLOR')
+                        randomKey = keys[Math.floor(Math.random() * keysLength)];
+                        ListMesh[key].destination = ListMesh[randomKey].posBuilding;
+                        ListMesh[key].mesh.material.color.setHex(0x00ff00);
+                    } else {
+                        // change probability
+                        ListMesh[key].virusPropabillity = Math.random();
+                    }
+
+                } else {
+                    // console.log(val.mesh.position)
+                    val.mesh.position.x = newMeshPos.x;
+                    val.mesh.position.y = newMeshPos.y;
+
+                }
+            }
+
 
             // update coordinate of the mesh
             val.mesh.updateMatrixWorld();
 
 
-            { {/*  view.camera.camera3D.position.x += 0.01;  */ } }
         }
 
 
@@ -88,20 +108,20 @@ function updateAgent(ListMesh) {
     }
 
     )
+    // console.log(ListMesh);
 }
 
 
 function animate() {
     requestAnimationFrame(animate);
 
-    console.log(Object.entries(ListMesh).length
-    )
+
 
     updateAgent(ListMesh)
     view.mainLoop.gfxEngine.renderer.render(view.scene, view.camera.camera3D)
 }
 
-// animate();
+
 
 
 // Listen for globe full initialisation event
@@ -110,17 +130,61 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     console.info('Globe initialized');
 
     let mesh;
+    let randomKey;
 
-    // add mesh
+    let keys = Object.keys(ListMesh);
+    let keysLength = keys.length;
+
+    // add mesh + pos batiment fix
     Object.entries(ListMesh).forEach(function ([key, val]) {
+        randomKey = keys[Math.floor(Math.random() * keysLength)];
         mesh = addMeshToScene(val.position.x, val.position.y, val.position.z, view);
         ListMesh[key].mesh = mesh;
-        console.log("test2")
+
+        ListMesh[key].posBuilding = mesh.position;
+
+        // console.log(mesh)
     })
 
+    // add destination
+    Object.entries(ListMesh).forEach(function ([key, val]) {
+        randomKey = keys[Math.floor(Math.random() * keysLength)];
+        ListMesh[key].destination = ListMesh[randomKey].posBuilding;
+
+    })
+    console.log('"""""""""""""""""""""""""""""')
+    console.log(ListMesh);
+    // updateAgent(ListMesh)
     animate()
 
 });
 
+function meshNewPos(meshPosition, destinationPosition) {
 
+    // console.log(meshPosition)
 
+    let mx = meshPosition.x;
+    let my = meshPosition.y;
+
+    let dx = destinationPosition.x;
+    let dy = destinationPosition.y;
+
+    let diff_x = Math.abs(mx - dx);
+    let diff_y = Math.abs(my - dy);
+
+    if ((mx < dx) && (diff_x > 1)) {
+        mx += 1;
+    } else if ((my < dy) && (diff_y > 1)) {
+        my += 1;
+    } else if ((mx > dx) && (diff_x > 1)) {
+        mx -= 1;
+    } else if ((my > dy) && (diff_y > 1)) {
+        my -= 1;
+    } else if ((diff_x < 1)) {
+        mx = dx;
+    } else if ((diff_y < 1)) {
+        my = dy;
+    }
+
+    return { x: mx, y: my };
+}
