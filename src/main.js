@@ -62,10 +62,15 @@ const layerCoord = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geo
 const geometry_layer = layerCoord.layer
 const ListMesh = layerCoord.coords // List Mesh
 
+let copiedListMesh
 
 console.log("test");
 // console.log(ListMesh);
 view.addLayer(geometry_layer);
+
+// Durée de l'animation (en secondes)
+var duration = 100;
+var elapsed = 0;
 
 
 function updateAgent(ListMesh) {
@@ -81,46 +86,9 @@ function updateAgent(ListMesh) {
     Object.entries(ListMesh).forEach(function ([key, val]) {
 
         if (val.mesh && val.destination && val.mesh.position) {
-
-
-            // console.log(val.mesh)
-
-            newMeshPos = meshNewPos(val.mesh.position, val.destination);
-            if (newMeshPos) {
-                // console.log("dfsqfsqdfsqfsdqfd");
-                if (((Math.abs(newMeshPos.x - val.destination.x)) < 1) && ((Math.abs(newMeshPos.y - val.destination.y)) < 1)) {
-                    // reached destination
-                    if (val.virusProbability > 0.7) {
-                        // Contaminated
-                        console.log('CHANGE COLOR')
-                        randomKey = keys[Math.floor(Math.random() * keysLength)];
-                        ListMesh[key].destination = ListMesh[randomKey].posBuilding;
-                        ListMesh[key].mesh.material.color.setHex(0x00ff00);
-                    } else {
-                        // change probability
-                        ListMesh[key].virusProbability = Math.random();
-                    }
-
-                } else {
-                    // console.log(val.mesh.position)
-                    val.mesh.position.x = newMeshPos.x;
-                    val.mesh.position.y = newMeshPos.y;
-
-                }
-            }
-
-
-            // update coordinate of the mesh
-            val.mesh.updateMatrixWorld();
-
-
+            val.elapsed = updatePos(val.mesh, val.mesh.position, val.destination, val.elapsed)
         }
-
-
-
-    }
-
-    )
+    })
     // console.log(ListMesh);
 }
 
@@ -163,41 +131,30 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
     Object.entries(ListMesh).forEach(function ([key, val]) {
         randomKey = keys[Math.floor(Math.random() * keysLength)];
         ListMesh[key].destination = ListMesh[randomKey].posBuilding;
+        ListMesh[key].elapsed = 0;
 
     })
-    console.log('"""""""""""""""""""""""""""""')
-    console.log(ListMesh);
+    // console.log('"""""""""""""""""""""""""""""')
+    // console.log(ListMesh);
     // updateAgent(ListMesh)
+
+    copiedListMesh = JSON.parse(JSON.stringify(ListMesh));
+
+    console.log(copiedListMesh)
+
     animate()
 
 });
 
-function meshNewPos(meshPosition, destinationPosition) {
-
-    // console.log(meshPosition)
-
-    let mx = meshPosition.x;
-    let my = meshPosition.y;
-
-    let dx = destinationPosition.x;
-    let dy = destinationPosition.y;
-
-    let diff_x = Math.abs(mx - dx);
-    let diff_y = Math.abs(my - dy);
-
-    if ((mx < dx) && (diff_x > 1)) {
-        mx += 1;
-    } else if ((my < dy) && (diff_y > 1)) {
-        my += 1;
-    } else if ((mx > dx) && (diff_x > 1)) {
-        mx -= 1;
-    } else if ((my > dy) && (diff_y > 1)) {
-        my -= 1;
-    } else if ((diff_x < 1)) {
-        mx = dx;
-    } else if ((diff_y < 1)) {
-        my = dy;
-    }
-
-    return { x: mx, y: my };
+function updatePos(mesh, meshPosition, destinationPosition, elapsed) {
+    elapsed++;
+    // console.log(elapsed)
+    // Interpolation linéaire entre les deux points
+    var t = elapsed / (duration * 10000);
+    mesh.position.lerpVectors(meshPosition, destinationPosition, t);
+    mesh.updateMatrixWorld()
+    return elapsed;
 }
+
+
+

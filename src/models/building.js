@@ -21,10 +21,16 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
             },
 
         }),
-        onMeshCreated: function virusspread(mesh) {
+        onMeshCreated: function virusspread(mesh, layer) {
+            // console.log("mesh")
+            // console.log(mesh)
+            // console.log("layer")
+            // console.log(layer)
             mesh.children.forEach(c => {
 
                 let geoms = c.children[0].children[0].children[0].feature.geometries
+
+                // console.log(c.children[0].children[0].children[0])
 
 
 
@@ -35,8 +41,10 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
                     if ((count % 20) == 0) {
 
                         let id = goem.properties.id;
+                        // console.log(id)
                         ListMesh[id] = {
                             id: id,
+                            batMesh: goem,
                             position: {
                                 x: (goem.properties.bbox[0] + goem.properties.bbox[2]) / 2,
                                 y: (goem.properties.bbox[1] + goem.properties.bbox[3]) / 2,
@@ -59,15 +67,23 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
         },
     });
 
+    function setColor(properties) {
+        let color = "rgb(255, 255, 255)"
+        // ne marche pas 
+        if (Object.keys(ListMesh).includes(properties.id)) {
+            console.log(properties.id)
+
+        }
+        return new itowns.THREE.Color(color);
+    }
+
     // console.log(listCoords)
 
-    return { layer: geomLayer, coords: ListMesh };
+    return { layer: geomLayer, coords: ListMesh, src: geometrySource };
 }
 
 // Coloring the data
-function setColor(properties) {
-    return new itowns.THREE.Color(0xaaaaaa);
-}
+
 
 // Extruding the data 
 function setExtrusion(properties) {
@@ -95,8 +111,8 @@ function setAltitude(properties) {
 export function addMeshToScene(x, y, z, view) {
     // creation of the new mesh (a cylinder)
     const THREE = itowns.THREE;
-    const geometry = new THREE.CylinderGeometry(0, 10, 60, 8);
-    const material = new THREE.MeshBasicMaterial({ color: 0xff69b4 });
+    const geometry = new THREE.SphereGeometry(10, 32, 16)
+    const material = new THREE.MeshBasicMaterial({ color: "rgb(0, 255, 0)" });
     const mesh = new THREE.Mesh(geometry, material);
 
     // get the position on the globe, from the camera
@@ -109,10 +125,9 @@ export function addMeshToScene(x, y, z, view) {
     meshCoord.x = x;
     meshCoord.y = y;
 
+
     // position and orientation of the mesh
     mesh.position.copy(meshCoord.as(view.referenceCrs)); // *****
-    // mesh.lookAt(new THREE.Vector3(0, 0, 0));
-    mesh.rotateX(Math.PI / 2);
 
     // update coordinate of the mesh
     mesh.updateMatrixWorld(); // *****
