@@ -4,7 +4,7 @@ import { buildingLayer, addMeshToScene } from "./models/building";
 
 // View
 const viewerDiv = document.getElementById('viewerDiv');
-
+const THREE = itowns.THREE;
 const extent = {
     west: 4.77244,
     east: 4.87408,
@@ -72,7 +72,8 @@ view.addLayer(geometry_layer);
 var duration = 100;
 var elapsed = 0;
 
-
+var initPos = {}
+var i = 0;
 function updateAgent(ListMesh) {
     // meshNewPos(meshPosition, destinationPosition)
 
@@ -81,12 +82,22 @@ function updateAgent(ListMesh) {
 
     let keys = Object.keys(ListMesh);
     let keysLength = keys.length;
+
     // console.log("dfsqfsqdfsqfsdqfd");
 
     Object.entries(ListMesh).forEach(function ([key, val]) {
 
         if (val.mesh && val.destination && val.mesh.position) {
             val.elapsed = updatePos(val.mesh, val.mesh.position, val.destination, val.elapsed)
+            // console.log(val.mesh.position.distanceTo(val.destination))
+            if (val.mesh.position.distanceTo(val.destination) < 50) {
+                if (val.elapsed > 1) {
+                    val.mesh.material.color.set("rgb(255, 0, 0)")
+
+                }
+                randomKey = keys[Math.floor(Math.random() * keysLength)];
+                val.destination = copiedListMesh[randomKey].posBuilding
+            }
         }
     })
     // console.log(ListMesh);
@@ -133,6 +144,18 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
         ListMesh[key].destination = ListMesh[randomKey].posBuilding;
         ListMesh[key].elapsed = 0;
 
+        const points = [];
+        points.push(ListMesh[key].posBuilding);
+        points.push(ListMesh[randomKey].posBuilding);
+
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+        const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
+
+        const line = new THREE.Line(geometry, material);
+
+        view.scene.add(line);
+
     })
     // console.log('"""""""""""""""""""""""""""""')
     // console.log(ListMesh);
@@ -156,5 +179,12 @@ function updatePos(mesh, meshPosition, destinationPosition, elapsed) {
     return elapsed;
 }
 
+function distance(x, y, x1, y1) {
+    this.x = x;
+    this.y = y;
+    this.x1 = x1;
+    this.y1 = y1;
+    return Math.sqrt((Math.pow(this.x1 - this.x, 2)) + (Math.pow(this.y1 - this.y, 2)))
+}
 
 
