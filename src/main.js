@@ -69,7 +69,7 @@ let copiedListMesh
 view.addLayer(geometry_layer);
 
 // Durée de l'animation (en secondes)
-var duration = 100;
+var duration = 1000;
 var elapsed = 0;
 
 var initPos = {}
