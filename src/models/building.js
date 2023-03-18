@@ -22,15 +22,15 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
 
         }),
         onMeshCreated: function virusspread(mesh, layer) {
-            console.log("mesh")
-            console.log(mesh)
-            console.log("layer")
-            console.log(layer)
+            // console.log("mesh")
+            // console.log(mesh)
+            // console.log("layer")
+            // console.log(layer)
             mesh.children.forEach(c => {
 
                 let geoms = c.children[0].children[0].children[0].feature.geometries
 
-                console.log(c.children[0].children[0].children[0])
+                // console.log(c.children[0].children[0].children[0])
 
 
 
@@ -69,14 +69,10 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
 
     function setColor(properties) {
         let color = "rgb(255, 255, 255)"
+        // ne marche pas 
         if (Object.keys(ListMesh).includes(properties.id)) {
             console.log(properties.id)
 
-        }
-
-        console.log(properties.id.includes("BATIMENT0000000240878"))
-        if (properties.id.includes("BATIMENT0000000240878")) {
-            color = "rgb(255, 0, 0)"
         }
         return new itowns.THREE.Color(color);
     }
@@ -132,8 +128,6 @@ export function addMeshToScene(x, y, z, view) {
 
     // position and orientation of the mesh
     mesh.position.copy(meshCoord.as(view.referenceCrs)); // *****
-    // mesh.lookAt(new THREE.Vector3(0, 0, 0));
-    mesh.rotateX(Math.PI / 2);
 
     // update coordinate of the mesh
     mesh.updateMatrixWorld(); // *****
