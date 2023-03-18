@@ -35,7 +35,7 @@ let view = new itowns.GlobeView(viewerDiv, placement, {
 const atmosphere = view.getLayerById('atmosphere');
 atmosphere.setRealisticOn(true);
 // WMTS Layer
-const wmts_layer = wmtsLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts',
+const wmts_layer = wmtsLayer('https://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts',
     'EPSG:3857',
     'ORTHOIMAGERY.ORTHOPHOTOS',
     'PM',
@@ -44,7 +44,7 @@ const wmts_layer = wmtsLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoport
 view.addLayer(wmts_layer);
 
 // Elevation
-const elevation_layer = elevationLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts',
+const elevation_layer = elevationLayer('https://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wmts',
     'EPSG:4326',
     'ELEVATION.ELEVATIONGRIDCOVERAGE.HIGHRES',
     'WGS84G',
@@ -52,7 +52,7 @@ const elevation_layer = elevationLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuq
 
 view.addLayer(elevation_layer);
 
-const layerCoord = buildingLayer('http://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
+const layerCoord = buildingLayer('https://wxs.ign.fr/3ht7xcw6f7nciopo16etuqp2/geoportail/wfs?',
     'BDTOPO_BDD_WLD_WGS84G:bati_indifferencie',
     'EPSG:4326',
     14,
@@ -64,7 +64,7 @@ const ListMesh = layerCoord.coords // List Mesh
 
 let copiedListMesh
 
-console.log("test");
+// console.log("test");
 // console.log(ListMesh);
 view.addLayer(geometry_layer);
 
@@ -163,7 +163,7 @@ view.addEventListener(itowns.GLOBE_VIEW_EVENTS.GLOBE_INITIALIZED, function globe
 
     copiedListMesh = JSON.parse(JSON.stringify(ListMesh));
 
-    console.log(copiedListMesh)
+    // console.log(copiedListMesh)
 
     animate()
 
