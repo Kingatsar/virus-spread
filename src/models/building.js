@@ -38,7 +38,7 @@ export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, vi
                 geoms.map(goem => {
                     count++;
 
-                    if ((count % 20) == 0) {
+                    if ((count % 50) == 0) {
 
                         let id = goem.properties.id;
                         // console.log(id)
