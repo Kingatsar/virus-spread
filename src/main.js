@@ -95,7 +95,7 @@ function updateAgent(ListMesh) {
                         console.log('CHANGE COLOR')
                         randomKey = keys[Math.floor(Math.random() * keysLength)];
                         ListMesh[key].destination = ListMesh[randomKey].posBuilding;
-                        ListMesh[key].mesh.material.color.setHex(0x00ff00);
+                        ListMesh[key].mesh.material.color.set("rgb(255, 0, 0)");
                     } else {
                         // change probability
                         ListMesh[key].virusProbability = Math.random();
