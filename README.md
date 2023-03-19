@@ -20,11 +20,11 @@ The goal of this project is to "simulate" virus propagation within "ghosts" in L
 
 Cloning the project:
 ```cmd
-   git clone https://gitlab.com/kingatsa/virus-spread.gi
-   cd virus-spread/src
+   git clone https://gitlab.com/kingatsa/virus-spread.git
+   cd virus-spread/
 ```
 
-In the folder **virus-spread/src**
+In the folder **virus-spread
 ```cmd
    npm i
    npm run build 
