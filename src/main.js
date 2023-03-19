@@ -2,6 +2,10 @@ import { wmtsLayer } from "./models/wmts";
 import { elevationLayer } from "./models/elevation";
 import { buildingLayer, addMeshToScene } from "./models/building";
 
+import { addFantom } from "./models/building";
+
+
+
 // View
 const viewerDiv = document.getElementById('viewerDiv');
 const THREE = itowns.THREE;
@@ -69,7 +73,7 @@ let copiedListMesh
 view.addLayer(geometry_layer);
 
 // Durée de l'animation (en secondes)
-var duration = 1000;
+var duration = 100;
 var elapsed = 0;
 
 var initPos = {}
@@ -89,10 +93,35 @@ function updateAgent(ListMesh) {
 
         if (val.mesh && val.destination && val.mesh.position) {
             val.elapsed = updatePos(val.mesh, val.mesh.position, val.destination, val.elapsed)
-            // console.log(val.mesh.position.distanceTo(val.destination))
+            if (val.meshFantom && val.meshFantom.mesh) {
+                val.meshFantom.mesh.position.copy(val.mesh.position)
+                val.meshFantom.mesh.updateMatrixWorld();
+
+                // contamination par la proximité 
+
+                Object.entries(ListMesh).forEach(function ([keyb, valb]) {
+                    // console.log(val.meshFantom.mesh.position.distanceTo(valb.mesh.position))
+                    if (val.meshFantom.mesh.position.distanceTo(valb.mesh.position) < 4 && val.meshFantom.mesh.position.distanceTo(valb.mesh.position) > 1) {
+
+                        if (valb.mesh.material.color.r != 1) {
+                            // console.log(" contamination par la proximité")
+                            valb.mesh.material.color.set("rgb(255, 0, 0)")
+                            // console.log(val.mesh.position.x)
+                            valb.meshFantom = addFantom(valb.mesh.position.x, valb.mesh.position.y, valb.mesh.position.z, view)
+                        }
+                    }
+
+                })
+
+            }
+            //contamitation par arriver à destination
             if (val.mesh.position.distanceTo(val.destination) < 50) {
                 if (val.elapsed > 1) {
-                    val.mesh.material.color.set("rgb(255, 0, 0)")
+                    if (val.mesh.material.color.r != 1) {
+                        val.mesh.material.color.set("rgb(255, 0, 0)")
+                        // console.log(contamitation par arriver à destination)
+                        val.meshFantom = addFantom(val.mesh.position.x, val.mesh.position.y, val.mesh.position.z, view)
+                    }
 
                 }
                 randomKey = keys[Math.floor(Math.random() * keysLength)];

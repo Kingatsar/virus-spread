@@ -1,3 +1,10 @@
+import {
+    GLTFLoader
+} from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+// creation of the new mesh (a cylinder)
+const THREE = itowns.THREE;
+
 
 export function buildingLayer(serverURL, nameType, crs, zoomMinLayer, extent, view) {
     const geometrySource = new itowns.WFSSource({
@@ -109,8 +116,7 @@ function setAltitude(properties) {
 
 
 export function addMeshToScene(x, y, z, view) {
-    // creation of the new mesh (a cylinder)
-    const THREE = itowns.THREE;
+
     const geometry = new THREE.SphereGeometry(10, 32, 16)
     const material = new THREE.MeshBasicMaterial({ color: "rgb(0, 255, 0)" });
     const mesh = new THREE.Mesh(geometry, material);
@@ -139,5 +145,71 @@ export function addMeshToScene(x, y, z, view) {
     view.mesh = mesh;
     view.notifyChange();
 
+
+
+
     return mesh
+}
+
+
+export function addFantom(x, y, z, view) {
+
+
+    let models = {
+        player: { url: 'assets/models/corona_virus.glb', name: 'player' },
+    };
+
+    const manager = new THREE.LoadingManager(
+        () => {
+            // console.log('loaded')
+        },
+
+        // Progress
+        () => {
+            // console.log('progress')
+        }
+    );
+
+    {
+
+        const gltfLoader = new GLTFLoader(manager);
+        for (const model of Object.values(models)) {
+            gltfLoader.load(model.url, (gltf) => {
+                model.gltf = gltf;
+
+                const cameraTargetPosition = view.controls.getLookAtCoordinate();
+                // const cameraTargetPosition = new itowns.Coordinates('EPSG:4326', x, y, z *******
+                // position of the mesh
+                const meshCoord = cameraTargetPosition;
+                // meshCoord.altitude += 40;
+
+                meshCoord.x = x;
+                meshCoord.y = y;
+                meshCoord.z = z;
+
+
+                // position and orientation of the mesh
+                model.gltf.scene.position.copy(meshCoord); // *****
+
+                model.gltf.scene.rotateX(Math.PI / 2);
+
+                model.gltf.scene.scale.x = 15
+                model.gltf.scene.scale.y = 15
+                model.gltf.scene.scale.z = 15
+
+
+
+                //model.gltf.sceneupdate coordinate of the mesh
+                model.gltf.scene.updateMatrixWorld(); // *****
+
+                // add the mesh to the scene
+                view.scene.add(model.gltf.scene);
+                // console.log(model.gltf.scene)
+                models.mesh = model.gltf.scene
+
+            })
+        }
+    }
+
+    return models;
 }
