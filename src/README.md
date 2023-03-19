@@ -1,7 +1,7 @@
 # github page:
    https://gtiazara.github.io/propagation_virus/
 
-   OBERVATION: Une simulatiuon de circulation routier (avec voiture et route du bd topo) aurais été beaucoup plus pertinement pour notre approche de ce courte projets. 
+   OBERVATION: hypothèse: les contamination se font soit par proximité < 5 m ou par arrivé à destinanation contaminer. 
 # installation: 
    - git clone https://gitlab.com/kingatsa/virus-spread.git
    - à la racine du projet: 
