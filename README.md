@@ -7,7 +7,7 @@
 The goal of this project is to "simulate" virus propagation within "ghosts" in Lyon. The healthy ghosts are pink, while the contaminated ghosts are green.
 
 
-![website](./src/images/screen.png)
+![website](./src/images/img.png)
 
 
 ## Table of Contents
