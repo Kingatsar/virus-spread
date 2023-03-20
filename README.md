@@ -4,7 +4,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/username/repo.svg)](https://github.com/username/repo/issues)
 [![GitHub stars](https://img.shields.io/github/stars/username/repo.svg)](https://github.com/username/repo/stargazers)
 
-The goal of this project is to "simulate" virus propagation within "ghosts" in Lyon. The healthy ghosts are pink, while the contaminated ghosts are green.
+
 
 
 ![website](./src/images/img.png)
